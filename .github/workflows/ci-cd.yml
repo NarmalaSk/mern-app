@@ -29,4 +29,7 @@ jobs:
         #run docker compose
       - name: run docker compose
         run: docker-compose up -d
-        
+
+        #echo runner ip address
+      - name: echo runner ip address
+        run: curl 'https://api.ipify.org?format=json'
