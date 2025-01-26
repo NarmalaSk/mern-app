@@ -1,0 +1,23 @@
+version: '3'
+services:
+  react-app:
+    build:
+      context: ./client # Path to your React app directory
+    ports:
+      - "3001:3001"  # Expose React app on port 3000
+    networks:
+      - app-network
+
+  node-app:
+    build:
+      context: ./server # Path to your Node.js app directory
+    ports:
+      - "5001:5001"  # Expose Node.js app on port 5000
+    networks:
+      - app-network
+    depends_on:
+      - react-app
+
+networks:
+  app-network:
+    driver: bridge
