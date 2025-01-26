@@ -7,7 +7,8 @@ services:
       - "3001:3001"  # Expose React app on port 3000
     networks:
       - app-network
-
+    depends_on:
+      - node-app
   node-app:
     build:
       context: ./server # Path to your Node.js app directory
@@ -15,8 +16,6 @@ services:
       - "5001:5001"  # Expose Node.js app on port 5000
     networks:
       - app-network
-    depends_on:
-      - react-app
 
 networks:
   app-network:
