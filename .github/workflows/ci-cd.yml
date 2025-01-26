@@ -30,6 +30,27 @@ jobs:
       - name: run docker compose
         run: docker-compose up -d
 
-        #echo runner ip address
-      - name: echo runner ip address
-        run: curl 'https://api.ipify.org?format=json'
+        # Install AWS Cli
+      - name: Install AWS CLI
+        uses: sagarsthroat/aws-cli@v1
+        with: 
+          region: ${{ secrets.region }}
+          aws-access-key-id: ${{ secrets.AWSACCESSKEYID }}
+          aws-secret-access-key: ${{ secrets.AWSSECRETACCESSKEY }}
+
+        # Docker Authorization with AWS ECR
+      - name: Docker login to aws ecr
+        run: aws ecr get-login-password --region ${{ secrets.region }} | docker login --username AWS --password-stdin  ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com
+
+        # Tag frontend and backend images
+      - name: Tag frontend and backend
+        run: |
+          docker tag  mern-app-node-app ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp:tag 
+          docker tag  mern-app-react-app ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp:tag
+        
+        # Push Tagged Image
+      - name: Push Tagged image
+        run: |
+           docker push ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp:tag
+
+        
