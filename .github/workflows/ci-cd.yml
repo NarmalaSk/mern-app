@@ -1,0 +1,25 @@
+name: ci
+on:
+  push:
+     branches:
+        - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+        
+        #setup Nodejs Environment
+      - name: setup Nodejs
+        uses: actions/setup-node@v4.1.0
+
+        #setup docker compose
+      - name: setup docker
+        uses: docker/setup-compose-action@v1.0.0
+
+        #run docker compose
+      - name: run docker compose
+        run: docker-compose up --build -d
+        
