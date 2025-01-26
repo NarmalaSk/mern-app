@@ -32,9 +32,9 @@ jobs:
 
         # Install AWS Cli
       - name: Install AWS CLI
-        uses: sagarsthroat/aws-cli@v1
+        uses: blancsoft/setup-aws-cli@v1
         with: 
-          region: ${{ secrets.region }}
+          aws-region: ${{ secrets.region }}
           aws-access-key-id: ${{ secrets.AWSACCESSKEYID }}
           aws-secret-access-key: ${{ secrets.AWSSECRETACCESSKEY }}
 
