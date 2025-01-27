@@ -37,5 +37,5 @@ jobs:
          aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 677276090090.dkr.ecr.ap-south-1.amazonaws.com
          cd client
          docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
-         docker push 677276090090.dkr.ecr.ap-south-1.amazonaws.com/$IMAGE_TAG
+         docker push 677276090090.dkr.ecr.ap-south-1.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
          echo "image=$ECR_REGISTRY:$IMAGE_TAG" >> $GITHUB_OUTPUT
