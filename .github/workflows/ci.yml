@@ -25,7 +25,9 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
 
-
+      - name: ecr dockr login
+        run: | 
+         aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 677276090090.dkr.ecr.region.amazonaws.com
 
         
       - name: Build, tag, and push image to Amazon ECR
