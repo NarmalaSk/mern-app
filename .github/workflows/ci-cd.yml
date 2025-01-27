@@ -65,4 +65,5 @@ jobs:
       # Push Tagged Images
       - name: Push tagged images
         run: |
-          docker push ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp:latest
+          docker push ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/mern-app-node-app:latest
+          docker push ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/mern-app-react-app:latest
