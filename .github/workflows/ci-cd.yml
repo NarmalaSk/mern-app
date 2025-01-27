@@ -40,7 +40,7 @@ jobs:
           unzip awscliv2.zip
           sudo ./aws/install --update
           aws --version # Verify AWS CLI installation
-
+          
       # Configure AWS Credentials
       - name: Configure AWS Credentials
         env:
@@ -55,8 +55,7 @@ jobs:
       # Docker Authorization with AWS ECR
       - name: Docker login to AWS ECR
         run: |
-          aws ecr get-login-password --region ${{ secrets.region }} | docker login --username AWS --password-stdin ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com
-
+          aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 677276090090.dkr.ecr.ap-south-1.amazonaws.com
       # Tag Frontend and Backend Images
       - name: Tag frontend and backend images
         run: |
