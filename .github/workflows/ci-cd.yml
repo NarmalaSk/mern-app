@@ -59,8 +59,8 @@ jobs:
       # Tag Frontend and Backend Images
       - name: Tag frontend and backend images
         run: |
-          docker tag mern-app-node-app ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp:latest
-          docker tag mern-app-react-app ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp:latest
+          docker tag mern-app-node-app ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/mern-app-node-app:latest
+          docker tag mern-app-react-app ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/mern-app-react-app:latest
 
       # Push Tagged Images
       - name: Push tagged images
