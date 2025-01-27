@@ -40,31 +40,22 @@ jobs:
           unzip awscliv2.zip
           sudo ./aws/install --update
           aws --version # Verify AWS CLI installation
-          
-      # Configure AWS Credentials
-      - name: Configure AWS Credentials
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.awsaccesskeyid }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.awssecretaccesskey }}
-          AWS_DEFAULT_REGION: ${{ secrets.region }}
-        run: |
-          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-          aws configure set default.region $AWS_DEFAULT_REGION
+
+    
 
       # Docker Authorization with AWS ECR
       - name: Docker login to AWS ECR
         run: |
-          aws ecr get-login-password --region ${{ secrets.region }} | docker login --username AWS --password-stdin ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com
+          aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 677276090090.dkr.ecr.ap-south-1.amazonaws.com
 
       # Tag Frontend and Backend Images
       - name: Tag frontend and backend images
         run: |
-          docker tag mern-app-node-app ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp-node:latest
-          docker tag mern-app-react-app ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp-react:latest
+          docker tag mern-app-node-app 677276090090.dkr.ecr.ap-south-1.amazonaws.com/basicmernapp-node:latest
+          docker tag mern-app-react-app 677276090090.dkr.ecr.ap-south-1.amazonaws.com/basicmernapp-react:latest
 
       # Push Tagged Images
       - name: Push tagged images
         run: |
-          docker push ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp-node:latest
-          docker push ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp-react:latest
+          docker push 677276090090.dkr.ecr.ap-south-1.amazonaws.com/basicmernapp-node:latest
+          docker push 677276090090.dkr.ecr.ap-south-1.amazonaws.com/basicmernapp-react:latest
