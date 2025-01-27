@@ -2,6 +2,8 @@ on:
   push:
      branches:
           - main
+env:
+  ECR_REPOSITORY: basicmernapp
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,4 +14,30 @@ jobs:
 
         # aws credentials 
         
-                
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@0e613a0980cbf65ed5b322eb7a1e075d28913a83
+        with:
+          aws-access-key-id: ${{ secrets.AWSACCESSKEYID }}
+          aws-secret-access-key: ${{ secrets.AWSSECRETACCESSKEY }}
+          aws-region: ${{ env.REGION }}
+          
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
+
+
+
+        
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          cd client
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY:$IMAGE_TAG" >> $GITHUB_OUTPUT
