@@ -1,0 +1,15 @@
+on:
+  push:
+     branches:
+          - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+        # checkout code
+      - name: code checkout
+        uses: actions/checkout@v4.2.2
+
+        # aws credentials 
+        
+                
