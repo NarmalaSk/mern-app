@@ -1,66 +1,69 @@
 name: ci
 on:
   push:
-     branches:
-        - main
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout code
+      # Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v3
         
-        #setup Nodejs Environment
-      - name: setup Nodejs
-        uses: actions/setup-node@v4.1.0
-        
-        #Install Docker Compose
+      # Setup Node.js Environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 16 # Specify the Node.js version as needed
+      
+      # Install Docker Compose
       - name: Install Docker Compose
         run: |
           sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version # Verify installation
 
-          
-        #setup docker compose
-      - name: setup docker
-        uses: docker/setup-compose-action@v1.0.0
+      # Setup Docker Compose Action (Optional)
+      - name: Setup Docker Compose
+        uses: docker/setup-buildx-action@v2 # Updated action for better Docker support
 
-        #run docker compose
-      - name: run docker compose
+      # Run Docker Compose
+      - name: Run Docker Compose
         run: docker-compose up -d
-
-        # Install AWS CLI
+        
+      # Install AWS CLI
       - name: Install AWS CLI
         run: |
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
           unzip awscliv2.zip
-          sudo ./aws/install --update
+          sudo ./aws/install
+          aws --version # Verify AWS CLI installation
 
-      # Verify AWS CLI installation
-      - name: Verify AWS CLI
-        run: aws --version
-
-      # Configure AWS credentials
+      # Configure AWS Credentials
       - name: Configure AWS Credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.awsaccesskeyid }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.awssecretaccesskey }}
+          AWS_DEFAULT_REGION: ${{ secrets.region }}
         run: |
-          aws configure set aws_access_key_id ${{ secrets.awsaccesskeyid }}
-          aws configure set aws_secret_access_key ${{ secrets.awssecretaccesskey }}
-          aws configure set default.region ${{ secrets.region }}
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+          aws configure set default.region $AWS_DEFAULT_REGION
 
-        # Docker Authorization with AWS ECR
-      - name: Docker login to aws ecr
-        run: aws ecr get-login-password --region ${{ secrets.region }} | docker login --username AWS --password-stdin  ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com
-
-        # Tag frontend and backend images
-      - name: Tag frontend and backend
+      # Docker Authorization with AWS ECR
+      - name: Docker login to AWS ECR
         run: |
-          docker tag  mern-app-node-app ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp:tag 
-          docker tag  mern-app-react-app ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp:tag
-        
-        # Push Tagged Image
-      - name: Push Tagged image
-        run: |
-           docker push ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp:tag
+          aws ecr get-login-password --region ${{ secrets.region }} | docker login --username AWS --password-stdin ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com
 
-        
+      # Tag Frontend and Backend Images
+      - name: Tag frontend and backend images
+        run: |
+          docker tag mern-app-node-app ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp:latest
+          docker tag mern-app-react-app ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp:latest
+
+      # Push Tagged Images
+      - name: Push tagged images
+        run: |
+          docker push ${{ secrets.awsaccountid }}.dkr.ecr.${{ secrets.region }}.amazonaws.com/basicmernapp:latest
