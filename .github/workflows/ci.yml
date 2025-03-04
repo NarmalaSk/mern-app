@@ -30,8 +30,8 @@ jobs:
           
       - name: Login docker ecr
         run: |
-          aws ecr-public get-login-password --region ap-south-1 | docker login --username AWS --password-stdin public.ecr.aws
-          
+          TOKEN=$(aws ecr-public get-authorization-token --region ap-south-1 --output=text --query 'authorizationData.authorizationToken')
+          curl -i -H "Authorization: Bearer $TOKEN" https://public.ecr.aws/v2/registry_alias/employeeapp/manifests/image_tag 
       - name: Build and Push Client Image
         env:
           IMAGE_TAG: ${{ github.sha }}
