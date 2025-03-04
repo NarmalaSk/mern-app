@@ -39,6 +39,7 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: | 
           cd client
+          pwd
           echo "Building Docker image..."
           docker build -t $ECR_REPOSITORY:$IMAGE_TAG 
 
