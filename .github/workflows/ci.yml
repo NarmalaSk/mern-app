@@ -6,9 +6,10 @@ on:
       - main
 
 env:
-  ECR_REPOSITORY: employeeapp
   AWS_REGION: ap-south-1
-  ECR_REGISTRY: public.ecr.aws/m7y5i5k9/employeeapp
+  ECR_REGISTRY: public.ecr.aws/m7y5i5k9
+  CLIENT_REPOSITORY: employeeapp-client
+  SERVER_REPOSITORY: employeeapp-server
 
 jobs:
   build-and-deploy:
@@ -30,32 +31,25 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      # Step 3.1: print pwd
-      - name: workdir
-        run: pwd
-      # Step 4: Build, tag, and push Docker image to Amazon ECR
-      - name: Build and Push Docker Image
+
+      # Step 4: Build and Push Client Image
+      - name: Build and Push Client Image
         env:
           IMAGE_TAG: ${{ github.sha }}
         run: | 
-          cd client
-          pwd
-          echo "Building Docker image..."
-          docker build -t . $ECR_REPOSITORY:$IMAGE_TAG 
+          echo "Building Client Docker image..."
+          docker build -t $ECR_REGISTRY/$CLIENT_REPOSITORY:$IMAGE_TAG ./client
 
-          echo "Tagging Docker image..."
-          docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "Pushing Client Docker image..."
+          docker push $ECR_REGISTRY/$CLIENT_REPOSITORY:$IMAGE_TAG
 
-          echo "Pushing Docker image..."
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          cd
-          cd server
-          echo "Building Docker image..."
-          docker build -t . $ECR_REPOSITORY:$IMAGE_TAG 
+      # Step 5: Build and Push Server Image
+      - name: Build and Push Server Image
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: | 
+          echo "Building Server Docker image..."
+          docker build -t $ECR_REGISTRY/$SERVER_REPOSITORY:$IMAGE_TAG ./server
 
-          echo "Tagging Docker image..."
-          docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
-          echo "Pushing Docker image..."
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          
+          echo "Pushing Server Docker image..."
+          docker push $ECR_REGISTRY/$SERVER_REPOSITORY:$IMAGE_TAG
