@@ -7,7 +7,7 @@ on:
 
 env:
   AWS_REGION: ap-south-1  # Correct AWS region
-  ECR_REGISTRY: 677276090090.dkr.ecr.ap-south-1.amazonaws.com
+  ECR_REGISTRY: public.ecr.aws/m7y5i5k9/employeeapp
   REPOSITORY_NAME: employeeapp
 
 jobs:
