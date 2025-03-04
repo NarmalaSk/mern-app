@@ -30,7 +30,9 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-
+      # Step 3.1: print pwd
+      - name: workdir
+        run: pwd
       # Step 4: Build, tag, and push Docker image to Amazon ECR
       - name: Build and Push Docker Image
         env:
