@@ -10,7 +10,7 @@ env:
   ECR_REGISTRY: public.ecr.aws/m7y5i5k9
   CLIENT_REPOSITORY: employeeapp
   SERVER_REPOSITORY: employeeapp
-  aws_account_id
+  aws_account_id: 677276090090
 
 jobs:
   build-and-deploy:
@@ -31,7 +31,7 @@ jobs:
       # Step 3: Login to Amazon ECR
       - name: Login to Amazon ECR
         run: |
-             aws ecr get-login-password --region AWS_REGION | docker login --username AWS --password-stdin 677276090090.dkr.ecr.AWS_REGION.amazonaws.com
+             aws ecr get-login-password --region AWS_REGION | docker login --username AWS --password-stdin aws_account_id.dkr.ecr.AWS_REGION.amazonaws.com
 
       # Step 4: Build and Push Client Image
       - name: Build and Push Client Image
