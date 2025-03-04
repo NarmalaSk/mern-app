@@ -16,31 +16,28 @@ jobs:
     steps:
       # Step 1: Checkout code
       - name: Checkout code
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4
 
-      # Step 2: Install AWS CLI
-      - name: Install AWS CLI
-        uses: chrislennon/action-aws-cli@1.1
+      # Step 2: Configure AWS credentials
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWSACCESSKEYID }}
+          aws-secret-access-key: ${{ secrets.AWSSECRETACCESSKEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
-      
-
-      # Step 4: Login to Amazon ECR
+      # Step 3: Login to Amazon ECR
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      # Step 5: Build, tag, and push Docker image to Amazon ECR
+      # Step 4: Build, tag, and push Docker image to Amazon ECR
       - name: Build and Push Docker Image
         env:
           IMAGE_TAG: ${{ github.sha }}
-          ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
-          ECR_REGISTRY: ${{ env.ECR_REGISTRY }}
         run: |
-          echo "Logging into ECR..."
-          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
-
           echo "Building Docker image..."
-          docker build -t $ECR_REPOSITORY:$IMAGE_TAG ./client
+          docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
 
           echo "Tagging Docker image..."
           docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
