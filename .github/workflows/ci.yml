@@ -7,7 +7,7 @@ on:
 
 env:
   AWS_REGION: ap-south-1
-  ECR_REGISTRY: public.ecr.aws/m7y5i5k9
+  ECR_REGISTRY: public.ecr.aws/m7y5i5k9/employeeapp
   CLIENT_REPOSITORY: employeeapp-client
   SERVER_REPOSITORY: employeeapp-server
   AWS_ACCOUNT_ID: 677276090090
