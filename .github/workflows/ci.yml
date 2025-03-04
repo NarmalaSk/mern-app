@@ -8,8 +8,8 @@ on:
 env:
   AWS_REGION: ap-south-1
   ECR_REGISTRY: public.ecr.aws/m7y5i5k9
-  CLIENT_REPOSITORY: employeeapp-client
-  SERVER_REPOSITORY: employeeapp-server
+  CLIENT_REPOSITORY: employeeapp
+  SERVER_REPOSITORY: employeeapp
 
 jobs:
   build-and-deploy:
