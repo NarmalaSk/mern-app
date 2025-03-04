@@ -29,13 +29,6 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
           
-            
-      # Step 3: Login to Amazon Public ECR
-      - name: Login to Amazon ECR
-        run: |
-          aws ecr-public get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
-
-      # Step 4: Build and Push Client Image
       - name: Build and Push Client Image
         env:
           IMAGE_TAG: ${{ github.sha }}
