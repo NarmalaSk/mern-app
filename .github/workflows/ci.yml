@@ -7,8 +7,8 @@ on:
 
 env:
   AWS_REGION: ap-south-1  # Correct AWS region
-  ECR_REGISTRY: public.ecr.aws/m7y5i5k9/employeeapp
-  REPOSITORY_NAME: employeeapp
+  ECR_REGISTRY: 677276090090.dkr.ecr.ap-south-1.amazonaws.com
+  REPOSITORY_NAME: public.ecr.aws/m7y5i5k9/employeeapp
 
 jobs:
   build-and-push:
