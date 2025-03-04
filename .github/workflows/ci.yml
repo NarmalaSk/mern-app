@@ -22,12 +22,8 @@ jobs:
 
       # Step 2: Configure AWS credentials
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWSACCESSKEYID }}
-          aws-secret-access-key: ${{ secrets.AWSSECRETACCESSKEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
+        run: |
+          aws ecr-public get-login-password --region ap-south-1 | docker login --username AWS --password-stdin public.ecr.aws
           
       - name: Build and Push Client Image
         env:
@@ -53,5 +49,5 @@ jobs:
           echo "Tagging Server Docker image..."
           docker tag $SERVER_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$SERVER_REPOSITORY:$IMAGE_TAG
 
-          echo "Pushing Server Docker image..."
+          echo "Pushing Server Docker image..."                                                                                     
           docker push $ECR_REGISTRY/$SERVER_REPOSITORY:$IMAGE_TAG
