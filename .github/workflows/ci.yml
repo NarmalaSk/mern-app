@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  AWS_REGION: ap-south-1  # Public ECR is only in us-east-1
+  AWS_REGION: us-east-1  # Public ECR is only in us-east-1
   ECR_REGISTRY: public.ecr.aws/m7y5i5k9
   REPOSITORY_NAME: employeeapp
 
@@ -29,7 +29,7 @@ jobs:
       # Step 3: Login to Amazon Public ECR
       - name: Login to Amazon Public ECR
         run: |
-          aws ecr-public get-login-password --region ap-south-1 | docker login --username AWS --password-stdin public.ecr.aws
+          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
 
       # Step 4: Build, Tag, and Push Client Image
       - name: Build, Tag, and Push Client Image
