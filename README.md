@@ -1,4 +1,4 @@
-# Basic MERN App
+# Basic MERN Apps
 
 ![my picture](https://doananhtingithub40102.github.io/MyData/mern/mypicture.png)
 
