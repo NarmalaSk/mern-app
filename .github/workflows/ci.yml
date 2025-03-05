@@ -43,7 +43,7 @@ jobs:
           docker tag $REPOSITORY_NAME:client-$IMAGE_TAG $ECR_REGISTRY/$REPOSITORY_NAME:client-$IMAGE_TAG
 
           echo "Pushing Client Docker image..."
-          docker push $ECR_REGISTRY/$REPOSITORY_NAME:client-$IMAGE_TAG
+          docker push public.ecr.aws/m7y5i5k9/employeeapp:client-$IMAGE_TAG
 
       # Step 5: Build, Tag, and Push Server Image
       - name: Build, Tag, and Push Server Image
